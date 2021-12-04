@@ -10,13 +10,44 @@ import SwiftUI
 struct ParallelogramView: View {
     
     // MARK: Stored properties
-    @State var b = 10.0
-    @State var h = 10.0
-    @State var c = 10.0
+    @State var providedBase = ""
+    @State var providedHeight = ""
+    @State var providedDiagonal = ""
 
     // MARK: Computed properties
-    var area: Double {
-        return b * h
+    var base: Double? {
+        guard let base = Double(providedBase),
+              base > 0
+        else {
+            return nil
+        }
+        return base
+    }
+    
+    var height: Double? {
+        guard let height = Double(providedHeight),
+              height > 0
+        else {
+            return nil
+        }
+        return height
+    }
+    
+    var diagonal: Double? {
+        guard let diagonal = Double(providedDiagonal),
+              diagonal > 0
+        else {
+            return nil
+        }
+        return diagonal
+    }
+    
+    var area: Double? {
+        guard let base = base, let height = height
+        else {
+            return nil
+        }
+        return base * height
     }
     
     var body: some View {
@@ -34,21 +65,10 @@ struct ParallelogramView: View {
                     SectionLabelView(text: "Base", variable: "b")
 
                     // Input: Base
-                    Slider(value: $b,
-                           in: 0.0...100.0,
-                           step: 0.1,
-                           label: {
-                        Text("Base")
-                    },
-                           minimumValueLabel: {
-                        Text("0")
-                    },
-                           maximumValueLabel: {
-                        Text("100")
-                    })
-                    
-                    // Output: Base
-                    SliderValueView(value: b)
+                    TextField("Base",
+                              text: $providedBase,
+                              prompt: Text("Numeric value greater than 0"))
+                        .foregroundColor(base == nil ? Color.red : Color.primary)
 
                 }
                 
@@ -58,21 +78,10 @@ struct ParallelogramView: View {
                     SectionLabelView(text: "Height", variable: "h")
 
                     // Input: Height
-                    Slider(value: $h,
-                           in: 0.0...100.0,
-                           step: 0.1,
-                           label: {
-                        Text("Height")
-                    },
-                           minimumValueLabel: {
-                        Text("0")
-                    },
-                           maximumValueLabel: {
-                        Text("100")
-                    })
-                    
-                    // Output: Base
-                    SliderValueView(value: h)
+                    TextField("Height",
+                              text: $providedHeight,
+                              prompt: Text("Numeric value greater than 0"))
+                        .foregroundColor(height == nil ? Color.red : Color.primary)
 
                 }
 
@@ -82,21 +91,10 @@ struct ParallelogramView: View {
                     SectionLabelView(text: "Diagonal", variable: "c")
 
                     // Input: Height
-                    Slider(value: $c,
-                           in: 0.0...100.0,
-                           step: 0.1,
-                           label: {
-                        Text("Height")
-                    },
-                           minimumValueLabel: {
-                        Text("0")
-                    },
-                           maximumValueLabel: {
-                        Text("100")
-                    })
-                    
-                    // Output: Base
-                    SliderValueView(value: c)
+                    TextField("Diagonal",
+                              text: $providedDiagonal,
+                              prompt: Text("Numeric value greater than 0"))
+                        .foregroundColor(diagonal == nil ? Color.red : Color.primary)
 
                 }
 
