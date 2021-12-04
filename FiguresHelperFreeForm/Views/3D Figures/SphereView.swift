@@ -10,10 +10,23 @@ import SwiftUI
 struct SphereView: View {
     
     // MARK: Stored properties
-    @State var radius = 10.0
+    @State var providedRadius = ""
     
     // MARK: Computed properties
-    var surfaceArea: Double {
+    var radius: Double? {
+        guard let radius = Double(providedRadius),
+              radius > 0
+        else {
+            return nil
+        }
+        return radius
+    }
+    
+    var surfaceArea: Double? {
+        guard let radius = radius
+        else {
+            return nil
+        }
         return 4 * Double.pi * radius * radius
     }
     
@@ -28,23 +41,10 @@ struct SphereView: View {
                 SectionLabelView(text: "Radius", variable: "r")
 
                 // Input: Radius
-                Slider(value: $radius,
-                       in: 0.0...100.0,
-                       step: 0.1,
-                       label: {
-                    Text("Radius")
-                },
-                       minimumValueLabel: {
-                    Text("0")
-                },
-                       maximumValueLabel: {
-                    Text("100")
-                })
-                
-                // Output: Radius
-                SliderValueView(value: radius)
-                
-                SectionLabelView(text: "Surface Area", variable: "")
+                TextField("Radius",
+                          text: $providedRadius,
+                          prompt: Text("Numeric value greater than 0"))
+                    .foregroundColor(radius == nil ? Color.red : Color.primary)
                 
                 // Output: Area
                 OutputValueView(value: surfaceArea, suffix: "cubed units")
